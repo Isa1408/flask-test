@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import Flask, Response, abort, jsonify, redirect, request, url_for
 from flask import render_template
 from flask import g
-from .database import Database
+from database import Database
 from flask_json_schema import JsonSchema
 from flask_json_schema import JsonValidationError
 import json
