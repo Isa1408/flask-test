@@ -1,5 +1,5 @@
 import sqlite3
-from .contravention import Contravention
+from contravention import Contravention
 
 class Database:
     def __init__(self):
