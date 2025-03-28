@@ -1,0 +1,253 @@
+#%RAML 1.0
+title: API Contraventions
+baseUri: http://127.0.0.1:5000
+mediaType: application/json
+
+types:
+  Contravention:
+    type: object
+    properties:
+      id_poursuite: 
+        type : integer
+        required : true
+      business_id:
+        type : integer
+        required : true
+      date:
+        type : date-only
+        required : true
+      description:
+        type : string
+        required : true
+      adresse:
+        type : string
+        required : true
+      date_jugement:
+        type : date-only
+        required : true
+      etablissement:
+        type : string
+        required : true
+      montant:
+        type : number
+        required : true
+      proprietaire:
+        type : string
+        required : true
+      ville:
+        type : string
+        required : true
+      statut:
+        type : string
+        required : true
+      date_statut:
+        type : date-only
+        required : true
+      categorie:
+        type : string
+        required : true
+  ContraventionExistant:
+    properties:
+      etablissement:
+        type : string
+        required : true
+      nombre_contraventions:
+        type : integer
+        required : true
+  ContrevenantEtablissement:
+    properties:
+      etablissement:
+        type : string
+        required : true
+/rechercher:
+  get:
+    description: Rechercher des contraventions selon des critères spécifiques.
+    queryParameters:
+      nom d'etablissement:
+        description: Le nom de l'établissement.
+        type: string
+        required: false
+      proprietaire:
+        description: Le nom du propriétaire.
+        type: string
+        required: false
+      rue:
+        description: La rue où se trouve l'établissement.
+        type: string
+        required: false
+    responses:
+      200:
+        description: Liste des contraventions qui correspondent aux critères de recherche.
+        body:
+          application/json:
+            type: Contravention[]
+      404:
+        description: La contravention spécifiée n'a pas été trouvée.
+        body:
+          application/json:
+            example: |
+              {
+                "error": "Aucune contravention correspond aux critères de recherche."
+              }
+      500:
+        description: Une erreur interne s'est produite.
+        body:
+          application/json:
+            example: |
+              {
+                "error": "Une erreur interne s'est produite."
+              }
+/api:
+  /contrevenants:
+    get:
+      description: Retourner les contrevenants entre deux dates et donner l'option de sélectionner un établissement.
+      queryParameters:
+        du:
+          description: La date de départ selon le format ISO 8601 (AAAA-MM-JJ).
+          type: date-only
+          required: true
+        au:
+          description: La date de fin selon le format ISO 8601 (AAAA-MM-JJ).
+          type: date-only
+          required: true
+        etablissement:
+          description: Le nom de l'établissement qui figure dans la liste.
+          type: string
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              type: Contravention[]
+        404:
+          description: Aucune contravention correspond aux critères de recherche.
+          body:
+            application/json:
+              example: |
+                {
+                  "error": "Aucune contravention correspond aux critères de recherche."
+                }
+        400:
+          description: Les paramètres 'du' et 'au' sont requis et les dates doivent être au format YYYY-MM-DD ISO 8601.
+          body:
+            application/json:
+              example: |
+                {
+                  "Les paramètres 'du' et 'au' sont requis et les dates doivent être au format YYYY-MM-DD ISO 8601."
+                }
+        500:
+          description: Une erreur interne s'est produite.
+          body:
+            application/json:
+              example: |
+                {
+                  "error": "Une erreur interne s'est produite."
+                }
+  /contrevenants.json:
+    get:
+      description: Obtenir la liste des établissements ayant commis une ou plusieurs infractions et retourner en format JSON.
+      responses:
+        200:
+          body:
+            application/json:
+              type: ContraventionExistant[]
+        404:
+          description: Aucun contravenant n'a été trouvé.
+          body:
+            application/json:
+              example: |
+                {
+                  "error": "Aucun contravenant n'a été trouvé."
+                }
+        500:
+          description: Une erreur interne s'est produite.
+          body:
+            application/json:
+              example: |
+                {
+                  "error": "Une erreur interne s'est produite."
+                }
+  /contrevenants.xml:
+    get:
+      description: Obtenir la liste des établissements ayant commis une ou plusieurs infractions et retourner en format XML.
+      responses:
+        200:
+          body:
+            application/json:
+              type: ContraventionExistant[]
+        404:
+          description: Aucun contravenant n'a été trouvé.
+          body:
+            application/json:
+              example: |
+                {
+                  "error": "Aucun contravenant n'a été trouvé."
+                }
+        500:
+          description: Une erreur interne s'est produite.
+          body:
+            application/json:
+              example: |
+                {
+                  "error": "Une erreur interne s'est produite."
+                }
+  /contrevenants.csv:
+    get:
+      description: Obtenir la liste des établissements ayant commis une ou plusieurs infractions et retourner en format CSV.
+      responses:
+        200:
+          body:
+            application/json:
+              type: ContraventionExistant[]
+        404:
+          description: Aucun contravenant n'a été trouvé.
+          body:
+            application/json:
+              example: |
+                {
+                  "error": "Aucun contravenant n'a été trouvé."
+                }
+        500:
+          description: Une erreur interne s'est produite.
+          body:
+            application/json:
+              example: |
+                {
+                  "error": "Une erreur interne s'est produite."
+                }
+  /filtre_etablissements:
+    get:
+      description: Retourner les contrevenants entre deux dates pour la liste déroulante.
+      queryParameters:
+        du:
+          description: La date de départ selon le format ISO 8601 (AAAA-MM-JJ).
+          type: date-only
+          required: true
+        au:
+          description: La date de fin selon le format ISO 8601 (AAAA-MM-JJ).
+          type: date-only
+          required: true
+      responses:
+        200:
+          body:
+            application/json:
+              type: ContrevenantEtablissement[]
+        400:
+          description: Les paramètres 'du' et 'au' sont requis et les dates doivent être au format YYYY-MM-DD ISO 8601.
+          body:
+            application/json:
+              example: |
+                {
+                  "Les paramètres 'du' et 'au' sont requis et les dates doivent être au format YYYY-MM-DD ISO 8601."
+                }
+        500:
+          description: Une erreur interne s'est produite.
+          body:
+            application/json:
+              example: |
+                {
+                  "error": "Une erreur interne s'est produite."
+                }
+/doc:
+  get:
+    description: Documentation de l'API

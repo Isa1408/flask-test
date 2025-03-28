@@ -1,0 +1,56 @@
+<!-- 
+Lien vers les pages Bootstrap utilisées :
+https://getbootstrap.com/docs/5.3/layout/containers/
+https://getbootstrap.com/docs/5.3/utilities/spacing/ 
+https://getbootstrap.com/docs/5.3/utilities/text/
+https://getbootstrap.com/docs/5.3/components/card/
+https://getbootstrap.com/docs/5.3/components/buttons/
+-->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    {% if contraventions %}
+        <div class="card text-start text-bg-secondary mb-5"> 
+            <div class="card-body p-5">
+            <h1 class="card-title fs-1">Résultat Des Recherches</h1>
+            <p class="card-text fs-5">Découvrez la liste des contraventions publiés sur le site de la ville de Montréal selon vos recherches.</p>
+            <a href="/" class="btn btn-light">Retourner à la barre de recherche</a>
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for contravention in contraventions %}
+            <div class="col">
+            <div class="card border-dark h-100">
+                <div class="card-body fs-6 m-3">
+                    <h5 class="card-title">Établissement: {{ contravention["etablissement"] }}</h5>
+                    <p class="card-text">
+                        <strong>ID Poursuite : </strong> {{ contravention["id_poursuite"] }}<br>
+                        <strong>Business ID : </strong> {{ contravention["business_id"] }}<br>
+                        <strong>Date : </strong> {{ contravention["date"] }}<br>
+                        <strong>Description : </strong> {{ contravention["description"] }}<br>
+                        <strong>Adresse : </strong> {{ contravention["adresse"] }}<br>
+                        <strong>Date De Jugement : </strong> {{ contravention["date_jugement"] }}<br>
+                        <strong>Montant : </strong> {{ contravention["montant"] }}<br>
+                        <strong>Propriétaire : </strong> {{ contravention["proprietaire"] }}<br>
+                        <strong>Ville : </strong> {{ contravention["ville"] }}<br>
+                        <strong>Statut : </strong> {{ contravention["statut"] }}<br>
+                        <strong>Date Statut : </strong> {{ contravention["date_statut"] }}<br>
+                        <strong>Catégorie : </strong> {{ contravention["categorie"] }}
+                    </p>
+                </div>
+            </div>
+            </div>
+            {% endfor %}
+    
+      </div>
+    {% else %}
+        <div class="card text-start text-bg-secondary mb-5"> 
+            <div class="card-body p-5">
+            <h1 class="card-title fs-1">Aucun résultat trouvé</h1>
+            <p class="card-text fs-5"> Veuillez sélectionner soit un nom d'établissement, un propriétaire ou une rue.</p>
+            <a href="/" class="btn btn-light">Retourner à la barre de recherche</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
